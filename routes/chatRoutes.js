@@ -9,13 +9,15 @@ const {
     removeFromGroup,
     addToGroup,
     leaveChat,
-    fetchGroupChats
+    fetchGroupChats,
+    fetchChatDetails
 
 } = require("../controllers/chatController");
 const { isAuthenticatedUser } = require("../middleware/authMiddleware");
 
 router.route("/").post(isAuthenticatedUser,accessChat);
 router.route("/").get(isAuthenticatedUser,fetchChats);
+router.route("/details/:chatId").get(isAuthenticatedUser,fetchChatDetails);
 router.route("/group").get(isAuthenticatedUser,fetchGroupChats);
 router.route("/group").post(isAuthenticatedUser,CreateGroupChat);
 router.route("/group/:chatId/rename").put(isAuthenticatedUser,renameGroup);

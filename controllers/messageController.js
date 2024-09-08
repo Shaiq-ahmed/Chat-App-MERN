@@ -67,33 +67,38 @@ const sendMessage = async (req, res, next) => {
 const getAllMessages = async (req, res, next) => {
     const chatId = req.params.chatId;
     const user = req.user.id;
+    const { offset = 0, limit = 20 } = req.query; 
 
     if (!chatId) {
-        return res.status(StatusCodes.BAD_REQUEST).json({ error: "Chat ID is required. Please ensure you've entered a valid chat ID." })
+        return res.status(StatusCodes.BAD_REQUEST).json({ error: "Chat ID is required. Please ensure you've entered a valid chat ID." });
     }
+
     try {
         const chat = await Chat.findById(chatId);
 
         if (!chat) {
             return res.status(StatusCodes.NOT_FOUND).json({ error: "Chat not found" });
         }
+
         const userExist = chat.users.find(userCheck => userCheck.equals(user));
 
         if (!userExist) {
-            return res.status(StatusCodes.BAD_REQUEST).json({error:"Insufficient Permission", success:false});
+            return res.status(StatusCodes.BAD_REQUEST).json({ error: "Insufficient Permission", success: false });
         }
 
-        const fetchChatMessages = await Message.find({chat: chatId})
-        .populate("sender", "name email avatar")
-        .sort({createdAt:-1});
+        const fetchChatMessages = await Message.find({ chat: chatId })
+            .populate("sender", "name avatar")
+            .sort({ createdAt: -1 })
+            .skip(parseInt(offset)) // Skip the first 'offset' messages
+            .limit(parseInt(limit)); // Limit the number of messages returned
 
-        return res.status(StatusCodes.OK).json({chat: fetchChatMessages, success:true});
+        return res.status(StatusCodes.OK).json({ messages: fetchChatMessages, success: true });
 
     } catch (error) {
-        console.error(error)
+        console.error(error);
         next(error);
     }
-}
+};
 
 
 

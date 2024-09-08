@@ -5,7 +5,7 @@ const cors = require('cors');
 const socketMiddleware = require('./middleware/socketMiddleware');
 const connectDB = require('./db/connection')
 const passport = require('passport');
-require('./passport')
+// require('./passport')
 
 const app = express();
 

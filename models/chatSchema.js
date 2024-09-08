@@ -5,6 +5,14 @@ const chatSchema = new mongoose.Schema({
     chatName: {
         type: String,
         trim: true,
+        required:[function () { return this.isGroupChat; } , 'Please provide a name for the group chat'],
+        maxLength:[30,"length must be less than 20 letters"]
+    },
+    groupDescription:{
+        type:String,
+        trim:true,
+        maxLength:[100,"length must be less than 20 letters"]
+
     },
     isGroupChat: {
         type: Boolean,
@@ -21,9 +29,7 @@ const chatSchema = new mongoose.Schema({
 
 
     ],
-    groupName: { type: String, 
-        required:[function () { return this.isGroupChat; } , 'Please provide a name for the group chat'],
-    },
+
     latestMessage: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Message"

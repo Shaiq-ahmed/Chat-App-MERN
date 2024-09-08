@@ -14,7 +14,7 @@ const PasswordSchema = new mongoose.Schema({
         default: Date.now, 
     },
 });
-PasswordSchema.index({ createdAt: 1 }, { expireAfterSeconds: 60 })
+PasswordSchema.index({ createdAt: 1 }, { expireAfterSeconds: 3600 })
 
 const password_verification_tokens = mongoose.model('password_verification_tokens', PasswordSchema);
 

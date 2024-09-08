@@ -5,7 +5,8 @@ const router = express.Router();
 const {
     getUserProfile,
     updatePassword,
-    UpdateUserProfile
+    UpdateUserProfile,
+    searchUsers
 
 } = require("../controllers/userController");
 const { isAuthenticatedUser } = require("../middleware/authMiddleware");
@@ -13,6 +14,8 @@ const { isAuthenticatedUser } = require("../middleware/authMiddleware");
 router.route("/profile").get(isAuthenticatedUser,getUserProfile);
 router.route("/change-password").patch(isAuthenticatedUser,updatePassword);
 router.route("/profile").put(isAuthenticatedUser,UpdateUserProfile);
+router.route("/search").get(isAuthenticatedUser,searchUsers);
+
 
 
 

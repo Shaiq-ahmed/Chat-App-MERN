@@ -79,24 +79,23 @@ const updatePassword = async (req, res) => {
 
 const searchUsers = async (req, res) => {
     try {
-        const { name, email } = req.query;
-
+        const { search } = req.query;
+        console.log(search);
         const searchCriteria = {
             $and: [
                 { _id: { $ne: req.user.id } },
                 {
                     $or: [
-                        { name: { $regex: name, $options: 'i' } }, 
-                        { email: { $regex: email, $options: 'i' } }
+                        { name: { $regex: search, $options: 'i' } }, 
+                        { email: { $regex: search, $options: 'i' } }
                     ]
                 }
             ]
         };
 
-        const users = await User.find(searchCriteria).populate({ _id: 1, name: 1, email: 1, avatar: 1 })
+        const users = await User.find(searchCriteria).select('name email avatar') 
 
-        return { users }
-
+        return res.status(StatusCodes.OK).json({ users });
 
     } catch (error) {
         console.log(error);
